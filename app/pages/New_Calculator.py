@@ -94,18 +94,18 @@ def _render_step1() -> None:
         description = st.text_area(
             "What does it do? *",
             value=prefill.description if prefill else "",
-            height=100,
+            height=200,
         )
         drivers_text = st.text_area(
             "Value Drivers *  (one per line: Name | Description)",
             value=_drivers_to_text(prefill.value_drivers) if prefill else "",
             placeholder="Time Savings | Eliminates manual data entry across workflows\nCost Reduction | Reduces headcount for repetitive tasks",
-            height=120,
+            height=240,
         )
         use_cases_text = st.text_area(
             "Use Cases  (optional, one per line)",
             value="\n".join(prefill.use_cases) if prefill else "",
-            height=70,
+            height=140,
         )
 
         save_to_library = st.checkbox(
