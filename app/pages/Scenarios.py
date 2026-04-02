@@ -83,7 +83,13 @@ def _regen_dialog(scenario: Scenario, calculator) -> None:
                 scenario.calculator = new_calc
                 save_scenario(scenario)
                 vals_key = f"sc_vals_{scenario.id}"
-                st.session_state.pop(vals_key, None)
+                if keep and adjusted:
+                    st.session_state[vals_key] = {
+                        f.key: (f.current_value if f.current_value is not None else f.ai_estimate)
+                        for f in new_calc.fields
+                    }
+                else:
+                    st.session_state[vals_key] = {f.key: f.ai_estimate for f in new_calc.fields}
                 st.rerun()
             except Exception as e:
                 st.error(f"Regeneration failed: {e}")
