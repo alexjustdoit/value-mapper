@@ -33,14 +33,15 @@ st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems
 
 @st.dialog("Rename Calculator")
 def _rename_dialog(scenario: Scenario) -> None:
-    new_name = st.text_input("Name", value=scenario.name)
-    col_ok, col_cancel = st.columns(2)
-    if col_ok.button("Save", type="primary", use_container_width=True):
-        if new_name.strip():
-            scenario.name = new_name.strip()
-            save_scenario(scenario)
-        st.rerun()
-    if col_cancel.button("Cancel", use_container_width=True):
+    with st.form("rename_form"):
+        new_name = st.text_input("Name", value=scenario.name)
+        col_ok, col_cancel = st.columns(2)
+        submitted = col_ok.form_submit_button("Save", type="primary", use_container_width=True)
+        cancelled = col_cancel.form_submit_button("Cancel", use_container_width=True)
+    if submitted and new_name.strip():
+        scenario.name = new_name.strip()
+        save_scenario(scenario)
+    if submitted or cancelled:
         st.rerun()
 
 
