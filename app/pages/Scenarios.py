@@ -9,6 +9,15 @@ from data.models import Scenario
 from data.store import delete_scenario, list_scenarios, save_scenario
 
 
+def _fmt_unit(unit: str) -> str:
+    _MAP = {
+        "$": "$ USD", "usd": "$ USD", "dollars": "$ USD",
+        "£": "£ GBP", "gbp": "£ GBP",
+        "€": "€ EUR", "eur": "€ EUR",
+    }
+    return _MAP.get(unit.lower(), unit.capitalize())
+
+
 def _build_export_text(scenario_name: str, product_name: str, customer, calculator) -> str:
     lines = [
         f"ROI Calculator — {scenario_name}",
@@ -117,6 +126,12 @@ def _render_calculator_view(scenario: Scenario) -> None:
 
     field_vals: dict = st.session_state[vals_key]
 
+    # Capture disk-saved state before applying session overrides
+    saved_vals = {
+        f.key: (f.current_value if f.current_value is not None else f.ai_estimate)
+        for f in calculator.fields
+    }
+
     # Apply overrides
     for field in calculator.fields:
         if field.key in field_vals:
@@ -160,7 +175,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
                 st.caption(f"{field.description}  \n*{field.value_driver}*")
             with col_input:
                 val = st.number_input(
-                    field.unit.capitalize(),
+                    _fmt_unit(field.unit),
                     value=int(current) if is_int else float(current),
                     min_value=0 if is_int else 0.0,
                     step=1 if is_int else max(1.0, float(current) * 0.05) if current > 0 else 1.0,
@@ -190,6 +205,10 @@ def _render_calculator_view(scenario: Scenario) -> None:
     st.divider()
 
     # ── Save changes ──────────────────────────────────────────────────────────
+    has_unsaved = any(new_vals.get(k) != saved_vals.get(k) for k in new_vals)
+    if has_unsaved:
+        st.caption("● Unsaved changes")
+
     col_save, col_regen, col_dl, _ = st.columns([2, 2, 2, 1])
 
     if col_save.button("💾  Save Changes", type="primary", use_container_width=True):

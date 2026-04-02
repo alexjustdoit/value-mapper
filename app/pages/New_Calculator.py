@@ -21,6 +21,15 @@ _SCENARIO_ID = "nc_scenario_id"    # str — ID of the auto-saved scenario
 _SCENARIO_NAME = "nc_scenario_name"  # str — current name of the auto-saved scenario
 
 
+def _fmt_unit(unit: str) -> str:
+    _MAP = {
+        "$": "$ USD", "usd": "$ USD", "dollars": "$ USD",
+        "£": "£ GBP", "gbp": "£ GBP",
+        "€": "€ EUR", "eur": "€ EUR",
+    }
+    return _MAP.get(unit.lower(), unit.capitalize())
+
+
 def _reset():
     for key in [_STEP, _PRODUCT, _CUSTOMER, _CALCULATOR, _FIELD_VALS, _SCENARIO_ID, _SCENARIO_NAME]:
         st.session_state.pop(key, None)
@@ -443,7 +452,7 @@ def _render_calculator() -> None:
                 st.caption(f"{field.description}  \n*Value driver: {field.value_driver}*")
             with col_input:
                 val = st.number_input(
-                    field.unit.capitalize(),
+                    _fmt_unit(field.unit),
                     value=int(current) if is_int else float(current),
                     min_value=0 if is_int else 0.0,
                     step=1 if is_int else max(1.0, float(current) * 0.05) if current > 0 else 1.0,

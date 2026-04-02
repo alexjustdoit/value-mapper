@@ -61,7 +61,8 @@ keys you define — no undefined variables
 - AI estimates should reflect realistic benchmarks for the given industry and company size
 - Be specific and concrete — avoid vague or generic metrics
 - Match the output metrics directly to the customer's stated pain points
-- Include at least one time-based metric and one financial metric in the output\
+- Include at least one time-based metric and one financial metric in the output
+- Always use "$" as the unit for monetary values (assume USD unless the customer context specifies otherwise)\
 """
 
 
