@@ -2,6 +2,8 @@ import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
+import uuid
+
 import streamlit as st
 from data.models import CustomerContext, ProductConfig, Scenario, ValueDriver
 from data.store import list_products, save_product, save_scenario
@@ -137,7 +139,7 @@ def _render_step1() -> None:
             return
 
         product = ProductConfig(
-            id=saved_product.id if saved_product else ProductConfig().id,
+            id=saved_product.id if saved_product else str(uuid.uuid4()),
             name=name.strip(),
             description=description.strip(),
             value_drivers=drivers,
