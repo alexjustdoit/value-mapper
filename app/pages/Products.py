@@ -35,16 +35,20 @@ def _drivers_to_text(drivers: list[ValueDriver]) -> str:
 # ── Add/Edit dialog ──────────────────────────────────────────────────────────
 
 _DIALOG_CSS = """<style>
-/* Expand dialog to use most of the viewport */
+/* Center and size the dialog */
 div[data-testid="stDialog"] > div {
-    width: 80vw !important;
-    max-width: 80vw !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
 div[data-testid="stDialog"] > div > div[role="dialog"] {
-    width: 80vw !important;
-    max-width: 80vw !important;
+    width: 65vw !important;
+    max-width: 65vw !important;
     max-height: 88vh !important;
     overflow-y: auto !important;
+    margin: 0 auto !important;
 }
 /* Make textareas fill available space dynamically */
 div[data-testid="stDialog"] textarea {
