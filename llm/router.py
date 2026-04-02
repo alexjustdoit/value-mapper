@@ -18,7 +18,7 @@ class LLMRouter:
     DEFAULT_QUALITY_API = "claude-haiku-4-5-20251001"
 
     def get_provider(self, quality_required: bool = False) -> LLMProvider:
-        use_local = os.getenv("USE_LOCAL_LLM", "true").lower() == "true"
+        use_local = os.getenv("USE_LOCAL_LLM", "false").lower() == "true"
 
         if use_local:
             from llm.providers.ollama_provider import OllamaProvider
