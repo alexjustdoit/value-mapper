@@ -31,6 +31,19 @@ def _build_export_text(scenario_name: str, product_name: str, customer, calculat
 st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
 
 
+@st.dialog("Rename Calculator")
+def _rename_dialog(scenario: Scenario) -> None:
+    new_name = st.text_input("Name", value=scenario.name)
+    col_ok, col_cancel = st.columns(2)
+    if col_ok.button("Save", type="primary", use_container_width=True):
+        if new_name.strip():
+            scenario.name = new_name.strip()
+            save_scenario(scenario)
+        st.rerun()
+    if col_cancel.button("Cancel", use_container_width=True):
+        st.rerun()
+
+
 def _render_calculator_view(scenario: Scenario) -> None:
     """Render the interactive calculator for a saved scenario."""
     from data.models import Calculator
@@ -56,7 +69,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
             field.current_value = field_vals[field.key]
 
     # ── Header ────────────────────────────────────────────────────────────────
-    col_back, col_title = st.columns([1, 6], vertical_alignment="center")
+    col_back, col_title, col_rename = st.columns([1, 5, 1], vertical_alignment="center")
     with col_back:
         if st.button("← Scenarios"):
             st.session_state.pop("active_scenario_id", None)
@@ -67,6 +80,9 @@ def _render_calculator_view(scenario: Scenario) -> None:
             f"{customer.company_name} · {customer.industry} · {customer.company_size}  \n"
             f"Product: {product.name}"
         )
+    with col_rename:
+        if st.button("✏️ Rename", use_container_width=True):
+            _rename_dialog(scenario)
 
     with st.expander("Why these metrics?", expanded=False):
         st.write(calculator.rationale)
