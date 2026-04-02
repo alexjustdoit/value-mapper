@@ -6,6 +6,8 @@ import uuid
 
 import streamlit as st
 from data.models import CustomerContext, ProductConfig, Scenario, ValueDriver
+
+st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
 from data.store import list_products, save_product, save_scenario
 from features.calculator_generation import generate_calculator
 

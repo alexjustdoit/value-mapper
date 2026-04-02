@@ -6,6 +6,8 @@ import streamlit as st
 from data.models import Scenario
 from data.store import delete_scenario, list_scenarios, save_scenario
 
+st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
+
 
 def _render_calculator_view(scenario: Scenario) -> None:
     """Render the interactive calculator for a saved scenario."""

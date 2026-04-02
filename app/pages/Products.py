@@ -6,6 +6,8 @@ import streamlit as st
 from data.models import ProductConfig, ValueDriver
 from data.store import delete_product, list_products, save_product
 
+st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
+
 
 def _parse_value_drivers(text: str) -> list[ValueDriver]:
     drivers = []

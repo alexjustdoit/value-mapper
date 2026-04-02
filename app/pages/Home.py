@@ -5,6 +5,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import streamlit as st
 from data.store import list_products, list_scenarios
 
+st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
+
 st.header("Value Mapper")
 st.markdown(
     "Value Mapper generates **custom ROI calculators** tailored to a specific product and customer. "
