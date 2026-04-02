@@ -238,6 +238,11 @@ def _render_list() -> None:
 
 # ── Page entrypoint ───────────────────────────────────────────────────────────
 
+# Sidebar always links here with ?view=list — use it to reset to list view
+if st.query_params.get("view") == "list":
+    st.session_state.pop("active_scenario_id", None)
+    del st.query_params["view"]
+
 active_id = st.session_state.get("active_scenario_id")
 
 if active_id:

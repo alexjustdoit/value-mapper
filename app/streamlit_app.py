@@ -59,7 +59,10 @@ if not st.session_state.get("_seeded"):
 
 with st.sidebar:
     for page in _main_pages:
-        st.page_link(page)
+        if page.title == "Scenarios":
+            st.page_link(page, query_params={"view": "list"})
+        else:
+            st.page_link(page)
 
 pg.run()
 render_sidebar_footer(_dev_pages)
