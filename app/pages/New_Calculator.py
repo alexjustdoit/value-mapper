@@ -227,8 +227,7 @@ _DEMO_CUSTOMERS = [
 def _render_step2() -> None:
     st.subheader("Step 2 — Customer Context")
 
-    col_caption, col_demo = st.columns([5, 1])
-    col_caption.caption("Describe the prospect or customer this calculator is being built for.")
+    st.caption("Describe the prospect or customer this calculator is being built for.")
 
     @st.dialog("Choose Demo Context")
     def _demo_picker() -> None:
@@ -240,8 +239,10 @@ def _render_step2() -> None:
                 st.session_state[_CUSTOMER] = c
                 st.rerun()
 
-    if col_demo.button("Demo →", help="Auto-fill with an example customer context"):
-        _demo_picker()
+    _, col_demo = st.columns([6, 1])
+    with col_demo:
+        if st.button("Demo →", use_container_width=True, help="Auto-fill with an example customer context"):
+            _demo_picker()
 
     preloaded = st.session_state.get(_CUSTOMER)
     prefill = CustomerContext.model_validate(preloaded) if preloaded else None
