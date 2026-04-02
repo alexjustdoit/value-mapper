@@ -32,7 +32,7 @@ st.markdown("""<style>
 _main_pages = [
     st.Page("pages/Home.py", title="Home"),
     st.Page("pages/New_Calculator.py", title="New Calculator"),
-    st.Page("pages/Scenarios.py", title="Scenarios"),
+    st.Page("pages/Scenarios.py", title="Saved Calculators"),
     st.Page("pages/Products.py", title="Product Library"),
 ]
 
@@ -59,7 +59,7 @@ if not st.session_state.get("_seeded"):
 
 with st.sidebar:
     for page in _main_pages:
-        if page.title == "Scenarios":
+        if page.title == "Saved Calculators":
             st.page_link(page, query_params={"view": "list"})
         else:
             st.page_link(page)

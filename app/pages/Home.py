@@ -23,7 +23,7 @@ generated = [s for s in scenarios if s.calculator is not None]
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Products Configured", len(products))
-col2.metric("Scenarios Saved", len(scenarios))
+col2.metric("Calculators Saved", len(scenarios))
 col3.metric("Calculators Generated", len(generated))
 
 st.divider()
@@ -37,15 +37,15 @@ with col_a:
         st.switch_page("pages/New_Calculator.py")
 
 with col_b:
-    st.subheader("View Saved Scenarios")
+    st.subheader("View Saved Calculators")
     st.caption("Reopen a previous calculator to adjust inputs, review ROI outputs, or present to a customer.")
-    if st.button("View Scenarios →", use_container_width=True):
+    if st.button("View Calculators →", use_container_width=True):
         st.switch_page("pages/Scenarios.py")
 
 # ── Recent scenarios ─────────────────────────────────────────────────────────
 if scenarios:
     st.divider()
-    st.subheader("Recent Scenarios")
+    st.subheader("Recent Calculators")
     for scenario in scenarios[:3]:
         status = "✅ Calculator ready" if scenario.calculator else "⏳ Needs generation"
         with st.container(border=True):

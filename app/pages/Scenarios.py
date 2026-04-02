@@ -175,8 +175,8 @@ def _render_calculator_view(scenario: Scenario) -> None:
 # ── Scenario list ─────────────────────────────────────────────────────────────
 
 def _render_list() -> None:
-    st.header("Scenarios")
-    st.caption("Saved calculators. Open any scenario to adjust inputs and review ROI outputs.")
+    st.header("Saved Calculators")
+    st.caption("Open any calculator to adjust inputs and review ROI outputs.")
 
     if st.button("+ New Calculator", type="primary"):
         st.switch_page("pages/New_Calculator.py")
