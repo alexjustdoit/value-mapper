@@ -38,12 +38,16 @@ import config  # noqa: F401 — must load after secrets injection
 from app.components.sidebar import render_sidebar_header, render_sidebar_footer
 from data.store import seed_demo_data
 
+# Inject CSS and branding on every render, including the first cold-start render.
+# Without this, the default Streamlit nav ("streamlit app") can render before
+# the Python-injected CSS arrives, leaving the sidebar broken until the user
+# navigates manually.
+render_sidebar_header()
+
 if not st.session_state.get("_seeded"):
     seed_demo_data()
     st.session_state["_seeded"] = True
     st.rerun()
-
-render_sidebar_header()
 
 with st.sidebar:
     for page in _main_pages:
