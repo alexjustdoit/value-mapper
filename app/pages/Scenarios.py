@@ -89,6 +89,8 @@ def _regen_dialog(scenario: Scenario, calculator) -> None:
                     for field in new_calc.fields:
                         if field.key in kept:
                             field.current_value = kept[field.key]
+                # Stash old calculator before overwriting
+                st.session_state[f"sc_prev_{scenario.id}"] = scenario.calculator.model_dump(mode="json")
                 scenario.calculator = new_calc
                 save_scenario(scenario)
                 vals_key = f"sc_vals_{scenario.id}"
@@ -115,8 +117,9 @@ def _render_calculator_view(scenario: Scenario) -> None:
     customer = scenario.customer
     product = scenario.product_snapshot
 
-    # Per-scenario field value overrides stored in session state
+    # Per-scenario session state keys
     vals_key = f"sc_vals_{scenario.id}"
+    prev_key = f"sc_prev_{scenario.id}"
     if vals_key not in st.session_state:
         # Seed with saved current_value or ai_estimate
         st.session_state[vals_key] = {
@@ -204,6 +207,22 @@ def _render_calculator_view(scenario: Scenario) -> None:
 
     st.divider()
 
+    # ── Restore banner (shown after regeneration) ─────────────────────────────
+    if prev_key in st.session_state:
+        col_msg, col_restore, col_dismiss = st.columns([5, 1, 1])
+        col_msg.caption("↩ Previous version available")
+        if col_restore.button("Restore", key="restore_prev", use_container_width=True):
+            from data.models import Calculator
+            old_calc = Calculator.model_validate(st.session_state[prev_key])
+            scenario.calculator = old_calc
+            save_scenario(scenario)
+            st.session_state.pop(prev_key, None)
+            st.session_state.pop(vals_key, None)
+            st.rerun()
+        if col_dismiss.button("Dismiss", key="dismiss_prev", use_container_width=True):
+            st.session_state.pop(prev_key, None)
+            st.rerun()
+
     # ── Save changes ──────────────────────────────────────────────────────────
     has_unsaved = any(new_vals.get(k) != saved_vals.get(k) for k in new_vals)
     if has_unsaved:
@@ -217,6 +236,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
             field.current_value = v if v != field.ai_estimate else None
         scenario.calculator = calculator
         save_scenario(scenario)
+        st.session_state.pop(prev_key, None)
         st.success("Changes saved.")
 
     export_text = _build_export_text(scenario.name, product.name, customer, calculator)
