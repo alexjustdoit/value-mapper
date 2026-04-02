@@ -110,11 +110,13 @@ def _render_step1() -> None:
             height=200,
         )
 
-        save_to_library = st.checkbox(
-            "Save this product to my library",
-            value=False,
-            help="Saves this product profile for use in future calculators.",
-        )
+        save_to_library = False
+        if not saved_product:
+            save_to_library = st.checkbox(
+                "Save this product to my library",
+                value=False,
+                help="Saves this product profile for use in future calculators.",
+            )
 
         col_next, col_cancel = st.columns([3, 1])
         with col_next:
