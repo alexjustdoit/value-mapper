@@ -1,0 +1,60 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+import streamlit as st
+from data.store import list_products, list_scenarios
+
+st.header("Value Mapper")
+st.markdown(
+    "Value Mapper generates **custom ROI calculators** tailored to a specific product and customer. "
+    "Enter your product's value drivers, describe a prospect's situation, and get an interactive "
+    "calculator with AI-estimated inputs — ready to adjust and present in any conversation."
+)
+
+st.divider()
+
+# ── Quick stats ──────────────────────────────────────────────────────────────
+products = list_products()
+scenarios = list_scenarios()
+generated = [s for s in scenarios if s.calculator is not None]
+
+col1, col2, col3 = st.columns(3)
+col1.metric("Products Configured", len(products))
+col2.metric("Scenarios Saved", len(scenarios))
+col3.metric("Calculators Generated", len(generated))
+
+st.divider()
+
+# ── CTAs ─────────────────────────────────────────────────────────────────────
+col_a, col_b = st.columns(2)
+with col_a:
+    st.subheader("Build a Calculator")
+    st.caption("Select a product, describe a customer, and let the AI build you a tailored ROI calculator.")
+    if st.button("New Calculator →", type="primary", use_container_width=True):
+        st.switch_page("pages/New_Calculator.py")
+
+with col_b:
+    st.subheader("View Saved Scenarios")
+    st.caption("Reopen a previous calculator to adjust inputs, review ROI outputs, or present to a customer.")
+    if st.button("View Scenarios →", use_container_width=True):
+        st.switch_page("pages/Scenarios.py")
+
+# ── Recent scenarios ─────────────────────────────────────────────────────────
+if scenarios:
+    st.divider()
+    st.subheader("Recent Scenarios")
+    for scenario in scenarios[:3]:
+        status = "✅ Calculator ready" if scenario.calculator else "⏳ Needs generation"
+        with st.container(border=True):
+            c1, c2 = st.columns([4, 1])
+            with c1:
+                st.markdown(f"**{scenario.name}**")
+                st.caption(
+                    f"{scenario.customer.company_name} · {scenario.customer.industry} · "
+                    f"{scenario.product_snapshot.name} · {status}"
+                )
+            with c2:
+                if st.button("Open", key=f"home_open_{scenario.id}", use_container_width=True):
+                    st.session_state["active_scenario_id"] = scenario.id
+                    st.switch_page("pages/Scenarios.py")

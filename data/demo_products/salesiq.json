@@ -1,0 +1,27 @@
+{
+  "id": "demo-product-salesiq",
+  "name": "SalesIQ",
+  "description": "SalesIQ is an AI-powered sales intelligence platform that automates prospect research, enriches CRM data in real time, and surfaces buying signals so reps spend more time selling and less time on admin. Designed for B2B SaaS sales teams.",
+  "value_drivers": [
+    {
+      "name": "Prospecting Efficiency",
+      "description": "Automates research and list building so reps spend more time on outreach"
+    },
+    {
+      "name": "Pipeline Velocity",
+      "description": "Surfaces buying signals and intent data to prioritize the right accounts at the right time"
+    },
+    {
+      "name": "Rep Productivity",
+      "description": "Reduces CRM admin overhead — auto-logging, data enrichment, and activity capture"
+    }
+  ],
+  "use_cases": [
+    "Automated prospect research and company enrichment",
+    "Intent-based account prioritization",
+    "CRM data hygiene and auto-logging",
+    "Competitive intelligence alerts"
+  ],
+  "created_at": "2026-04-01T00:00:00+00:00",
+  "updated_at": "2026-04-01T00:00:00+00:00"
+}

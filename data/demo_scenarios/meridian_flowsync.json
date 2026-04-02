@@ -1,0 +1,139 @@
+{
+  "id": "demo-scenario-meridian",
+  "name": "Meridian Financial — FlowSync",
+  "product_snapshot": {
+    "id": "demo-product-flowsync",
+    "name": "FlowSync",
+    "description": "FlowSync is a workflow automation platform that eliminates manual data entry and repetitive back-office processes. Operations and finance teams use it to automate reconciliation, data syncs, and approval workflows across their existing systems.",
+    "value_drivers": [
+      {
+        "name": "Time Savings",
+        "description": "Automates repetitive manual tasks, freeing staff to focus on higher-value work"
+      },
+      {
+        "name": "Error Reduction",
+        "description": "Eliminates human data entry errors and the downstream rework they cause"
+      },
+      {
+        "name": "Process Scalability",
+        "description": "Handles volume increases without adding headcount"
+      }
+    ],
+    "use_cases": [
+      "Automated invoice reconciliation",
+      "Real-time inventory sync across systems",
+      "Multi-step approval workflow automation"
+    ],
+    "created_at": "2026-04-01T00:00:00+00:00",
+    "updated_at": "2026-04-01T00:00:00+00:00"
+  },
+  "source_product_id": "demo-product-flowsync",
+  "customer": {
+    "company_name": "Meridian Financial",
+    "industry": "Financial Services",
+    "company_size": "500 employees",
+    "pain_points": [
+      "3 operations analysts spend 60% of their time on manual reconciliation",
+      "5% error rate in data entry causes significant downstream audit rework",
+      "Volume is growing 30% YoY but headcount budget is frozen"
+    ],
+    "notes": "Considering a Q3 rollout. Current tool is a mix of Excel and a legacy ERP."
+  },
+  "calculator": {
+    "fields": [
+      {
+        "id": "demo-field-01",
+        "key": "analysts",
+        "label": "Analysts performing manual reconciliation",
+        "unit": "employees",
+        "description": "Number of FTEs whose primary task involves manual data reconciliation",
+        "ai_estimate": 3.0,
+        "current_value": null,
+        "value_driver": "Time Savings"
+      },
+      {
+        "id": "demo-field-02",
+        "key": "hours_per_week",
+        "label": "Hours per analyst per week on manual tasks",
+        "unit": "hours/week",
+        "description": "Average time each analyst spends on reconciliation and data entry each week",
+        "ai_estimate": 24.0,
+        "current_value": null,
+        "value_driver": "Time Savings"
+      },
+      {
+        "id": "demo-field-03",
+        "key": "hourly_cost",
+        "label": "Fully-loaded cost per analyst hour",
+        "unit": "$/hour",
+        "description": "Salary + benefits + overhead per analyst hour",
+        "ai_estimate": 75.0,
+        "current_value": null,
+        "value_driver": "Time Savings"
+      },
+      {
+        "id": "demo-field-04",
+        "key": "error_rate_pct",
+        "label": "Data entry error rate",
+        "unit": "%",
+        "description": "Percentage of transactions requiring rework due to errors",
+        "ai_estimate": 5.0,
+        "current_value": null,
+        "value_driver": "Error Reduction"
+      },
+      {
+        "id": "demo-field-05",
+        "key": "rework_hours_per_error",
+        "label": "Hours to remediate one error",
+        "unit": "hours/error",
+        "description": "Average time to identify, investigate, and correct a single data entry error",
+        "ai_estimate": 2.5,
+        "current_value": null,
+        "value_driver": "Error Reduction"
+      },
+      {
+        "id": "demo-field-06",
+        "key": "monthly_transactions",
+        "label": "Monthly reconciliation transactions",
+        "unit": "transactions/month",
+        "description": "Total number of transactions processed manually each month",
+        "ai_estimate": 2000.0,
+        "current_value": null,
+        "value_driver": "Process Scalability"
+      }
+    ],
+    "output_metrics": [
+      {
+        "id": "demo-metric-01",
+        "label": "Annual Time Saved",
+        "unit": "hours/year",
+        "description": "Total analyst hours recovered from manual reconciliation per year",
+        "formula": "analysts * hours_per_week * 52"
+      },
+      {
+        "id": "demo-metric-02",
+        "label": "Annual Labour Cost Savings",
+        "unit": "$",
+        "description": "Value of analyst time recovered, at fully-loaded cost",
+        "formula": "analysts * hours_per_week * 52 * hourly_cost"
+      },
+      {
+        "id": "demo-metric-03",
+        "label": "Annual Error Remediation Savings",
+        "unit": "$",
+        "description": "Cost of rework eliminated by removing data entry errors",
+        "formula": "(monthly_transactions * 12) * (error_rate_pct / 100) * rework_hours_per_error * hourly_cost"
+      },
+      {
+        "id": "demo-metric-04",
+        "label": "Total Annual Savings",
+        "unit": "$",
+        "description": "Combined labour savings plus error remediation savings",
+        "formula": "(analysts * hours_per_week * 52 * hourly_cost) + ((monthly_transactions * 12) * (error_rate_pct / 100) * rework_hours_per_error * hourly_cost)"
+      }
+    ],
+    "rationale": "Meridian's core pain is analyst time lost to manual reconciliation and downstream audit rework from data errors. These metrics directly quantify both: recovered analyst capacity (the largest cost lever) and error-driven rework (their compliance risk). The transaction volume field captures the scalability argument as their 30% YoY growth makes manual processing increasingly unsustainable."
+  },
+  "created_at": "2026-04-01T00:00:00+00:00",
+  "updated_at": "2026-04-01T00:00:00+00:00"
+}

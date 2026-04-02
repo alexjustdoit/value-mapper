@@ -1,0 +1,27 @@
+{
+  "id": "demo-product-flowsync",
+  "name": "FlowSync",
+  "description": "FlowSync is a workflow automation platform that eliminates manual data entry and repetitive back-office processes. Operations and finance teams use it to automate reconciliation, data syncs, and approval workflows across their existing systems.",
+  "value_drivers": [
+    {
+      "name": "Time Savings",
+      "description": "Automates repetitive manual tasks, freeing staff to focus on higher-value work"
+    },
+    {
+      "name": "Error Reduction",
+      "description": "Eliminates human data entry errors and the downstream rework they cause"
+    },
+    {
+      "name": "Process Scalability",
+      "description": "Handles volume increases without adding headcount"
+    }
+  ],
+  "use_cases": [
+    "Automated invoice reconciliation",
+    "Real-time inventory sync across systems",
+    "Multi-step approval workflow automation",
+    "Data migration and ETL pipelines"
+  ],
+  "created_at": "2026-04-01T00:00:00+00:00",
+  "updated_at": "2026-04-01T00:00:00+00:00"
+}
