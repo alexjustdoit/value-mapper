@@ -25,7 +25,7 @@ def _step() -> int | str:
 
 
 def _render_progress(current: int | str) -> None:
-    steps = ["1  Product", "2  Customer", "3  Generate & Review"]
+    steps = ["1. Product", "2. Customer", "3. Generate & Review"]
     step_num = {"calculator": 3}.get(current, current)
     cols = st.columns(len(steps))
     for i, (col, label) in enumerate(zip(cols, steps), start=1):
