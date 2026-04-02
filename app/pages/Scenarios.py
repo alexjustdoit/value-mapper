@@ -59,16 +59,17 @@ def _render_calculator_view(scenario: Scenario) -> None:
         new_vals = {}
         for field in calculator.fields:
             current = field_vals.get(field.key, field.ai_estimate)
+            is_int = "$" not in field.unit and "%" not in field.unit and float(field.ai_estimate) == int(field.ai_estimate)
             col_label, col_input = st.columns([3, 2])
             with col_label:
                 st.markdown(f"**{field.label}**")
                 st.caption(f"{field.description}  \n*{field.value_driver}*")
             with col_input:
                 val = st.number_input(
-                    field.unit,
-                    value=float(current),
-                    min_value=0.0,
-                    step=max(1.0, float(current) * 0.05) if current > 0 else 1.0,
+                    field.unit.capitalize(),
+                    value=int(current) if is_int else float(current),
+                    min_value=0 if is_int else 0.0,
+                    step=1 if is_int else max(1.0, float(current) * 0.05) if current > 0 else 1.0,
                     key=f"sc_field_{scenario.id}_{field.key}",
                     label_visibility="visible",
                 )
