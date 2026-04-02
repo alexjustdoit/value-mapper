@@ -48,6 +48,50 @@ def _rename_dialog(scenario: Scenario) -> None:
         st.rerun()
 
 
+@st.dialog("Regenerate Calculator")
+def _regen_dialog(scenario: Scenario, calculator) -> None:
+    from features.calculator_generation import generate_calculator
+
+    adjusted = [f for f in calculator.fields if f.current_value is not None]
+
+    st.markdown(
+        "The AI will generate a new calculator for this product and customer. "
+        "**All current inputs will be replaced with fresh AI estimates.**"
+    )
+    if adjusted:
+        st.markdown(f"You have **{len(adjusted)} manually adjusted input(s)**.")
+
+    col_fresh, col_keep, col_cancel = st.columns(3)
+    fresh = col_fresh.button("Fresh start", use_container_width=True)
+    keep = col_keep.button(
+        "Keep adjustments",
+        type="primary",
+        use_container_width=True,
+        disabled=not adjusted,
+    )
+    cancel = col_cancel.button("Cancel", use_container_width=True)
+
+    if fresh or keep:
+        with st.spinner("Regenerating…"):
+            try:
+                new_calc = generate_calculator(scenario.product_snapshot, scenario.customer)
+                if keep and adjusted:
+                    kept = {f.key: f.current_value for f in calculator.fields if f.current_value is not None}
+                    for field in new_calc.fields:
+                        if field.key in kept:
+                            field.current_value = kept[field.key]
+                scenario.calculator = new_calc
+                save_scenario(scenario)
+                vals_key = f"sc_vals_{scenario.id}"
+                st.session_state.pop(vals_key, None)
+                st.rerun()
+            except Exception as e:
+                st.error(f"Regeneration failed: {e}")
+
+    if cancel:
+        st.rerun()
+
+
 def _render_calculator_view(scenario: Scenario) -> None:
     """Render the interactive calculator for a saved scenario."""
     from data.models import Calculator
@@ -159,17 +203,8 @@ def _render_calculator_view(scenario: Scenario) -> None:
         use_container_width=True,
     )
 
-    if col_regen.button("🔄  Regenerate", use_container_width=True, help="Re-run the AI to generate a fresh calculator"):
-        from features.calculator_generation import generate_calculator
-        with st.spinner("Regenerating…"):
-            try:
-                new_calc = generate_calculator(product, customer)
-                scenario.calculator = new_calc
-                save_scenario(scenario)
-                st.session_state.pop(vals_key, None)
-                st.rerun()
-            except Exception as e:
-                st.error(f"Regeneration failed: {e}")
+    if col_regen.button("🔄  Regenerate", use_container_width=True):
+        _regen_dialog(scenario, calculator)
 
 
 # ── Scenario list ─────────────────────────────────────────────────────────────
