@@ -15,7 +15,7 @@ class LLMRouter:
 
     DEFAULT_LOCAL_MODEL = "phi4"
     DEFAULT_CHEAP_API = "gpt-5.4-nano"
-    DEFAULT_QUALITY_API = "claude-haiku-4-5-20251001"
+    DEFAULT_QUALITY_API = "claude-sonnet-4-6"
 
     def get_provider(self, quality_required: bool = False) -> LLMProvider:
         use_local = os.getenv("USE_LOCAL_LLM", "false").lower() == "true"
