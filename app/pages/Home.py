@@ -60,3 +60,12 @@ if scenarios:
                 if st.button("Open", key=f"home_open_{scenario.id}", use_container_width=True):
                     st.session_state["active_scenario_id"] = scenario.id
                     st.switch_page("pages/Scenarios.py")
+
+# ── Portfolio narrative ───────────────────────────────────────────────────────
+st.divider()
+st.caption(
+    "Part of a portfolio of three SA/pre-sales tools: "
+    "[Discovery Assistant](https://discovery-assistant.streamlit.app) · "
+    "Value Mapper · "
+    "[TAM Copilot](https://tam-copilot.streamlit.app)"
+)
