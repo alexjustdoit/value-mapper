@@ -227,14 +227,21 @@ _DEMO_CUSTOMERS = [
 def _render_step2() -> None:
     st.subheader("Step 2 — Customer Context")
 
-    st.caption("Describe the prospect or customer this calculator is being built for.")
+    col_caption, col_demo = st.columns([5, 1])
+    col_caption.caption("Describe the prospect or customer this calculator is being built for.")
 
-    demo_options = ["— Select a demo context —"] + [c["company_name"] for c in _DEMO_CUSTOMERS]
-    demo_choice = st.selectbox("Load demo context", demo_options, label_visibility="collapsed")
-    if demo_choice != "— Select a demo context —":
-        selected = next(c for c in _DEMO_CUSTOMERS if c["company_name"] == demo_choice)
-        st.session_state[_CUSTOMER] = selected
-        st.rerun()
+    @st.dialog("Choose Demo Context")
+    def _demo_picker() -> None:
+        st.caption("Select a context to auto-fill the form.")
+        for c in _DEMO_CUSTOMERS:
+            industry = c["industry"]
+            size = c["company_size"]
+            if st.button(f"**{c['company_name']}**  \n{industry} · {size}", use_container_width=True):
+                st.session_state[_CUSTOMER] = c
+                st.rerun()
+
+    if col_demo.button("Demo →", help="Auto-fill with an example customer context"):
+        _demo_picker()
 
     preloaded = st.session_state.get(_CUSTOMER)
     prefill = CustomerContext.model_validate(preloaded) if preloaded else None
