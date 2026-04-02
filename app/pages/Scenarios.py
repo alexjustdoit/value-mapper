@@ -56,7 +56,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
             field.current_value = field_vals[field.key]
 
     # ── Header ────────────────────────────────────────────────────────────────
-    col_back, col_title = st.columns([1, 6])
+    col_back, col_title = st.columns([1, 6], vertical_alignment="center")
     with col_back:
         if st.button("← Scenarios"):
             st.session_state.pop("active_scenario_id", None)
