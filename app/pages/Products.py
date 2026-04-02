@@ -34,8 +34,29 @@ def _drivers_to_text(drivers: list[ValueDriver]) -> str:
 
 # ── Add/Edit dialog ──────────────────────────────────────────────────────────
 
+_DIALOG_CSS = """<style>
+/* Expand dialog to use most of the viewport */
+div[data-testid="stDialog"] > div {
+    width: 80vw !important;
+    max-width: 80vw !important;
+}
+div[data-testid="stDialog"] > div > div[role="dialog"] {
+    width: 80vw !important;
+    max-width: 80vw !important;
+    max-height: 88vh !important;
+    overflow-y: auto !important;
+}
+/* Make textareas fill available space dynamically */
+div[data-testid="stDialog"] textarea {
+    min-height: 14vh !important;
+    height: 14vh !important;
+}
+</style>"""
+
+
 @st.dialog("Product Config", width="large")
 def _product_form(existing: ProductConfig | None = None) -> None:
+    st.markdown(_DIALOG_CSS, unsafe_allow_html=True)
     is_edit = existing is not None
     label = "Save Changes" if is_edit else "Add Product"
 
@@ -49,19 +70,16 @@ def _product_form(existing: ProductConfig | None = None) -> None:
             "What does it do? *",
             value=existing.description if is_edit else "",
             placeholder="Briefly describe what the product does and who uses it.",
-            height=100,
         )
         drivers_text = st.text_area(
             "Value Drivers *  (one per line: Name | Description)",
             value=_drivers_to_text(existing.value_drivers) if is_edit else "",
             placeholder="Time Savings | Eliminates manual data entry across workflows\nCost Reduction | Reduces headcount needed for repetitive tasks",
-            height=130,
         )
         use_cases_text = st.text_area(
             "Use Cases  (one per line, optional)",
             value="\n".join(existing.use_cases) if is_edit else "",
             placeholder="Automated invoice reconciliation\nReal-time inventory sync",
-            height=80,
         )
         submitted = st.form_submit_button(label, type="primary", use_container_width=True)
 
