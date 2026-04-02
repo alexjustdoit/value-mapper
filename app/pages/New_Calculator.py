@@ -105,7 +105,7 @@ def _render_step1() -> None:
         use_cases_text = st.text_area(
             "Use Cases  (optional, one per line)",
             value="\n".join(prefill.use_cases) if prefill else "",
-            height=140,
+            height=200,
         )
 
         save_to_library = st.checkbox(
