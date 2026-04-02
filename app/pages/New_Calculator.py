@@ -156,11 +156,83 @@ def _render_step1() -> None:
         st.rerun()
 
 
+# ── Demo customer contexts ───────────────────────────────────────────────────
+
+_DEMO_CUSTOMERS = [
+    {
+        "company_name": "Meridian Financial",
+        "industry": "Financial Services",
+        "company_size": "300–500 employees",
+        "pain_points": [
+            "Manual reconciliation across 4 systems consumes 3 analysts at 60% capacity",
+            "Month-end close takes 8 days due to data inconsistencies and rework",
+            "High error rate in data entry causing downstream audit findings",
+            "No single source of truth — Finance and Ops work from different spreadsheets",
+        ],
+        "notes": "Mid-market regional bank. Recently failed an internal audit due to process gaps. CFO is the economic buyer and wants to cut close time in half before year-end.",
+    },
+    {
+        "company_name": "Cascade Health Systems",
+        "industry": "Healthcare",
+        "company_size": "1,000–2,500 employees",
+        "pain_points": [
+            "Clinical staff spend 35% of shift time on administrative documentation",
+            "Patient intake process averages 22 minutes due to manual data entry",
+            "Duplicate patient records causing billing errors and compliance risk",
+            "IT and clinical teams operate in silos — no shared workflow tooling",
+        ],
+        "notes": "Regional hospital network across 6 facilities. Under pressure to reduce operational costs by 15% this fiscal year. HIPAA compliance is a hard requirement for any new tooling.",
+    },
+    {
+        "company_name": "Apex Fabrication",
+        "industry": "Manufacturing",
+        "company_size": "500–1,000 employees",
+        "pain_points": [
+            "Production scheduling is done in Excel — changes take hours to propagate",
+            "Inventory discrepancies between warehouse and ERP cause frequent line stoppages",
+            "Quality defect reporting is manual, delaying root cause analysis by days",
+            "No real-time visibility into machine utilisation across 3 production lines",
+        ],
+        "notes": "Contract manufacturer for automotive OEMs. Tight SLA requirements — a single line stoppage costs ~$40k/hour. Currently evaluating 3 vendors before Q3 capex freeze.",
+    },
+    {
+        "company_name": "Nova Commerce",
+        "industry": "E-commerce / Retail",
+        "company_size": "80–200 employees",
+        "pain_points": [
+            "Order fulfilment errors running at 4% — above the 1% industry benchmark",
+            "Customer support handles 600+ tickets/month, 40% of which are order status enquiries",
+            "Inventory sync between Shopify, 3PL, and ERP lags by up to 6 hours",
+            "Returns processing is fully manual — takes 3 staff members 2 days per week",
+        ],
+        "notes": "Fast-growing DTC brand. Headcount is frozen but order volume is up 60% YoY. COO wants to scale operations without adding headcount.",
+    },
+    {
+        "company_name": "Orbit Analytics",
+        "industry": "B2B SaaS",
+        "company_size": "50–150 employees",
+        "pain_points": [
+            "Sales reps spend 3+ hours per day on manual CRM data entry and activity logging",
+            "Pipeline data is stale by the time it reaches the weekly forecast call",
+            "Onboarding new reps takes 6 weeks — too much tribal knowledge, no structured playbook",
+            "CS and Sales have no shared view of account health, causing renewal surprises",
+        ],
+        "notes": "Series B SaaS company. 40-person sales org, growing fast. CRO is the sponsor — wants to improve forecast accuracy and reduce ramp time ahead of a planned sales headcount expansion.",
+    },
+]
+
+
 # ── Step 2: Customer context ─────────────────────────────────────────────────
 
 def _render_step2() -> None:
     st.subheader("Step 2 — Customer Context")
-    st.caption("Describe the prospect or customer this calculator is being built for.")
+
+    col_caption, col_demo = st.columns([5, 1])
+    col_caption.caption("Describe the prospect or customer this calculator is being built for.")
+    if col_demo.button("⚡ Demo", help="Fill with a random example customer context"):
+        import random
+        st.session_state[_CUSTOMER] = random.choice(_DEMO_CUSTOMERS)
+        st.rerun()
 
     preloaded = st.session_state.get(_CUSTOMER)
     prefill = CustomerContext.model_validate(preloaded) if preloaded else None
