@@ -227,11 +227,13 @@ _DEMO_CUSTOMERS = [
 def _render_step2() -> None:
     st.subheader("Step 2 — Customer Context")
 
-    col_caption, col_demo = st.columns([5, 1])
-    col_caption.caption("Describe the prospect or customer this calculator is being built for.")
-    if col_demo.button("⚡ Demo", help="Fill with a random example customer context"):
-        import random
-        st.session_state[_CUSTOMER] = random.choice(_DEMO_CUSTOMERS)
+    st.caption("Describe the prospect or customer this calculator is being built for.")
+
+    demo_options = ["— Select a demo context —"] + [c["company_name"] for c in _DEMO_CUSTOMERS]
+    demo_choice = st.selectbox("Load demo context", demo_options, label_visibility="collapsed")
+    if demo_choice != "— Select a demo context —":
+        selected = next(c for c in _DEMO_CUSTOMERS if c["company_name"] == demo_choice)
+        st.session_state[_CUSTOMER] = selected
         st.rerun()
 
     preloaded = st.session_state.get(_CUSTOMER)
