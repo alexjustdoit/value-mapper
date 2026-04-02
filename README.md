@@ -123,23 +123,3 @@ value-mapper/
 │   └── demo_scenarios/         # Meridian Financial / FlowSync — complete with calculator
 └── tests/                      # pytest suite
 ```
-
----
-
-## Portfolio Talking Points
-
-**LLM engineering**
-- Provider abstraction — Ollama, OpenAI, and Anthropic behind a single router interface; one env flag switches providers without code changes
-- Structured outputs throughout — calculator generation returns a fully validated Pydantic schema (field keys, formulas, estimates, rationale) rather than raw text
-- Quality routing — calculator generation always uses `quality_required=True`, routing to Claude Haiku for reliable structured output; GPT-5.4-nano is the fallback
-- Formula safety — restricted `eval()` with a field-key-only namespace; the AI is constrained to use only the identifiers it defines, validated by schema before evaluation
-
-**Product and domain depth**
-- Models the real SA workflow: define a product once, tailor calculations to each prospect's pain points and industry rather than presenting a generic ROI estimate
-- Product/scenario separation — saved configs are reusable; per-scenario edits don't overwrite the library, and the link back to the source product is preserved
-- AI estimates anchored to industry benchmarks and company size, not static defaults — the calculator starts at a credible baseline before the SA adjusts
-
-**Engineering decisions**
-- Flat JSON persistence with a clean storage boundary — zero-config local dev, swap for a database without touching anything outside `data/store.py`
-- SCC per-session isolation via query-param token — multi-user demo without authentication overhead
-- 27-test suite covering model behavior, serialization roundtrips, formula evaluation, and feature logic
