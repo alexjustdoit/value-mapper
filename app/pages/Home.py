@@ -96,9 +96,20 @@ if scenarios:
 
 # ── Portfolio narrative ───────────────────────────────────────────────────────
 st.divider()
+
+st.subheader("A Portfolio of SA Tools")
 st.caption(
-    "Part of a portfolio of three SA/pre-sales tools: "
-    "[Discovery Assistant](https://discovery-assistant.streamlit.app) · "
-    "Value Mapper · "
-    "[TAM Copilot](https://tam-copilot.streamlit.app)"
+    "Three complementary tools that cover the full pre-sales workflow — from discovery to ROI quantification. "
+    "All built with AI-assisted workflows and designed for reuse."
 )
+
+col_p1, col_p2, col_p3 = st.columns(3)
+with col_p1:
+    st.markdown("**[Discovery Assistant](https://discovery-assistant.streamlit.app)**")
+    st.caption("Structured discovery interviews with AI-powered insight synthesis. Builds a searchable knowledge base of customer pain points and use cases.")
+with col_p2:
+    st.markdown("**Value Mapper**")
+    st.caption("Tailored ROI calculators generated on-the-fly. Configure once, build calculators for any customer context.")
+with col_p3:
+    st.markdown("**[TAM Copilot](https://tam-copilot.streamlit.app)**")
+    st.caption("Market sizing assistant with multi-step TAM calculations. Generates transparent, auditable market opportunity estimates.")

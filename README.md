@@ -4,10 +4,6 @@ AI-powered ROI calculator builder for Solutions Architects and pre-sales enginee
 
 Configure your product's value drivers once, describe a prospect's situation, and get a custom interactive calculator with AI-estimated inputs — ready to adjust and present in any sales conversation.
 
-**[Try the live demo →](https://value-mapper.streamlit.app)**
-
-> **Note:** Hosted on Streamlit's free tier — the app sleeps after a period of inactivity. If you see a "This app has gone to sleep" screen, click the wake-up button and allow 30–60 seconds to start.
-
 ---
 
 ## Why I built this

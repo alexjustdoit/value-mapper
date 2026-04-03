@@ -5,7 +5,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import uuid
 
 import streamlit as st
-from app.utils import build_export_pdf, fmt_unit
+from app.utils import build_export_pdf, export_filename, fmt_unit
 from data.models import CustomerContext, Scenario
 from data.store import delete_scenario, list_scenarios, save_scenario
 
@@ -29,6 +29,29 @@ def _rename_dialog(scenario: Scenario) -> None:
         scenario.name = new_name.strip()
         save_scenario(scenario)
     if submitted or cancelled:
+        st.rerun()
+
+
+@st.dialog("Duplicate Calculator")
+def _duplicate_dialog(scenario: Scenario) -> None:
+    suggestion = f"Copy of {scenario.name}"
+    with st.form("duplicate_form"):
+        new_name = st.text_input("New name", value=suggestion)
+        col_ok, col_cancel = st.columns(2)
+        submitted = col_ok.form_submit_button("Create", type="primary", use_container_width=True)
+        cancelled = col_cancel.form_submit_button("Cancel", use_container_width=True)
+    if submitted and new_name.strip():
+        dup = Scenario(
+            name=new_name.strip(),
+            product_snapshot=scenario.product_snapshot,
+            source_product_id=scenario.source_product_id,
+            customer=scenario.customer,
+            calculator=scenario.calculator,
+        )
+        save_scenario(dup)
+        st.session_state["show_edit_context_after_dup"] = dup.id
+        st.rerun()
+    if cancelled:
         st.rerun()
 
 
@@ -361,7 +384,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
     col_dl.download_button(
         "⬇️  Export PDF",
         data=pdf_bytes,
-        file_name=f"{scenario.name.replace(' ', '_')}.pdf",
+        file_name=export_filename(customer.company_name, product.name),
         mime="application/pdf",
         use_container_width=True,
     )
@@ -414,15 +437,7 @@ def _render_list() -> None:
                     st.rerun()
             with c3:
                 if st.button("Duplicate", key=f"dup_{scenario.id}", use_container_width=True):
-                    dup = Scenario(
-                        name=f"Copy of {scenario.name}",
-                        product_snapshot=scenario.product_snapshot,
-                        source_product_id=scenario.source_product_id,
-                        customer=scenario.customer,
-                        calculator=scenario.calculator,
-                    )
-                    save_scenario(dup)
-                    st.rerun()
+                    _duplicate_dialog(scenario)
             with c4:
                 if st.button("Delete", key=f"del_{scenario.id}", use_container_width=True):
                     st.session_state[f"confirm_del_{scenario.id}"] = True

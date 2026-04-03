@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from datetime import datetime
 
 from fpdf import FPDF
 
@@ -53,6 +54,17 @@ def fmt_unit(unit: str) -> str:
     return _MAP.get(unit.lower(), unit.capitalize())
 
 
+def export_filename(company_name: str, product_name: str) -> str:
+    """Generate a clean export filename: {company}_{product}_{date}.pdf"""
+    def sanitize(s: str) -> str:
+        return "".join(c if c.isalnum() else "_" for c in s).strip("_")
+
+    date_str = datetime.now().strftime("%Y%m%d")
+    company_safe = sanitize(company_name)[:20]
+    product_safe = sanitize(product_name)[:20]
+    return f"{company_safe}_{product_safe}_{date_str}.pdf"
+
+
 def build_export_pdf(
     scenario_name: str,
     product_name: str,
@@ -88,9 +100,10 @@ def build_export_pdf(
     pdf.set_xy(20, 35)
     pdf.set_text_color(*GRAY)
     pdf.set_font("Helvetica", "", 8)
+    timestamp = datetime.now().strftime("%b %d, %Y")
     meta = _pdf_str(
         f"{customer.company_name}  ·  {customer.industry}  ·  "
-        f"{customer.company_size}  ·  Product: {product_name}"
+        f"{customer.company_size}  ·  Product: {product_name}  ·  {timestamp}"
     )
     pdf.cell(0, 5, meta, new_x="LMARGIN", new_y="NEXT")
     pdf.ln(4)
