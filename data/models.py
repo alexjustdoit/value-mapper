@@ -79,6 +79,8 @@ class OutputMetric(BaseModel):
             return f"{value:.1f} {unit}" if value != int(value) else f"{int(value)} {unit}"
         if value == int(value):
             return f"{int(value):,} {unit}"
+        if value >= 100:
+            return f"{round(value):,} {unit}"
         return f"{value:,.1f} {unit}"
 
 

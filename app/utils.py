@@ -115,42 +115,37 @@ def build_export_pdf(
     pdf.set_text_color(*GRAY)
     pdf.set_font("Helvetica", "B", 8)
     for w, label in zip(col_widths, ["Field", "Unit", "Value"]):
-        pdf.cell(w, 5, label, fill=True)
+        pdf.cell(w, 6, label, fill=True)
     pdf.ln()
 
     # Data rows
     for i, field in enumerate(calculator.fields):
         val = field.current_value if field.current_value is not None else field.ai_estimate
 
-        try:
-            is_int = (
-                "$" not in field.unit
-                and "%" not in field.unit
-                and float(field.ai_estimate) == int(field.ai_estimate)
-            )
-        except (ValueError, TypeError):
-            is_int = False
-        val_str = str(int(val)) if is_int else f"{val:,.2f}"
+        if "$" in field.unit:
+            val_str = f"{val:,.0f}"
+        else:
+            try:
+                is_int = (
+                    "%" not in field.unit
+                    and float(field.ai_estimate) == int(field.ai_estimate)
+                )
+            except (ValueError, TypeError):
+                is_int = False
+            val_str = str(int(val)) if is_int else f"{val:,.2f}"
 
         fill_color = (252, 252, 254) if i % 2 == 0 else (255, 255, 255)
         pdf.set_fill_color(*fill_color)
 
         pdf.set_text_color(*DARK)
         pdf.set_font("Helvetica", "B", 8)
-        pdf.cell(col_widths[0], 5, _pdf_str(field.label)[:55], fill=True)
+        pdf.cell(col_widths[0], 6, _pdf_str(field.label)[:55], fill=True)
         pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*GRAY)
-        pdf.cell(col_widths[1], 5, _pdf_str(fmt_unit(field.unit))[:18], fill=True)
+        pdf.cell(col_widths[1], 6, _pdf_str(fmt_unit(field.unit))[:18], fill=True)
         pdf.set_text_color(*DARK)
-        pdf.cell(col_widths[2], 5, val_str, fill=True)
+        pdf.cell(col_widths[2], 6, val_str, fill=True)
         pdf.ln()
-
-        # Description sub-row
-        pdf.set_text_color(*GRAY)
-        pdf.set_font("Helvetica", "I", 7)
-        pdf.set_x(pdf.l_margin)
-        pdf.cell(0, 4, _pdf_str(_truncate(field.description)))
-        pdf.ln(5)
 
     pdf.ln(5)
 
