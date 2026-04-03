@@ -8,6 +8,16 @@ All notable changes to Value Mapper are documented here.
 
 ---
 
+## [1.0.0] — 2026-04-02
+
+### Added
+- `.env.example` — setup file referenced in README was missing; includes all supported environment variables with comments
+
+### Changed
+- Version bumped to 1.0.0 — feature set is complete and the app is production-ready on Streamlit Community Cloud
+
+---
+
 ## [0.5.0] — 2026-04-02
 
 ### Added
