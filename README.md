@@ -8,8 +8,6 @@ Configure your product's value drivers once, describe a prospect's situation, an
 
 > **Note:** Hosted on Streamlit's free tier — the app sleeps after a period of inactivity. If you see a "This app has gone to sleep" screen, click the wake-up button and allow 30–60 seconds to start.
 
-![App screenshot](docs/screenshot.png)
-
 ---
 
 ## Why I built this
@@ -20,7 +18,7 @@ Value Mapper solves this by separating the product configuration from the calcul
 
 This is a portfolio project targeting Solutions Architect and pre-sales engineering roles. It demonstrates both domain fluency — the workflow reflects how SAs actually quantify value in deals — and technical depth: structured AI outputs, formula evaluation, provider abstraction, and a clean data model built for reuse.
 
-Two demo products (FlowSync, SalesIQ) and one complete scenario (Meridian Financial) are pre-loaded so any reviewer can see the full workflow immediately.
+Two demo products (FlowSync, SalesIQ) and two complete scenarios (Meridian Financial / FlowSync, Orbit Analytics / SalesIQ) are pre-loaded so any reviewer can explore the full workflow immediately — including the side-by-side comparison view.
 
 ---
 
@@ -30,12 +28,15 @@ Two demo products (FlowSync, SalesIQ) and one complete scenario (Meridian Financ
 
 **2. New Calculator** — a 3-step flow:
 - *Step 1 — Product:* load from the library or enter details inline. Per-scenario edits never overwrite the saved product config.
-- *Step 2 — Customer:* company name, industry, size, pain points, and any additional context.
+- *Step 2 — Customer:* company name, industry, size, pain points, and any additional context. Five demo customer contexts are available via a picker dialog.
 - *Step 3 — Generate:* the AI builds a calculator tailored to this product/customer combination — input fields with realistic industry-based estimates, output metrics with arithmetic formulas, and a rationale for why these metrics were chosen.
 
-**3. Interactive Calculator** — the calculator is auto-saved immediately after generation so it's never lost. Adjust any AI-estimated input; all output metrics recalculate live. Input fields show whether a value is the original AI estimate or an SA override. An unsaved changes indicator appears when session values differ from what's on disk. Use "Rename & Save" to optionally rename the calculator before committing; export to a plain-text file at any point.
+**3. Interactive Calculator** — the calculator is auto-saved immediately after generation so it's never lost. Adjust any AI-estimated input; all output metrics recalculate live. An unsaved changes indicator appears when session values differ from disk. Regeneration prompts for *Fresh start* or *Keep adjustments* (re-applies manual overrides to the new calculator), with a *Restore previous version* banner in case you want to roll back. Export to a styled PDF at any point.
 
-**4. Saved Calculators** — full list of saved calculators. Reopen any scenario to adjust inputs, review ROI outputs, export, or regenerate. Regeneration prompts for confirmation and offers two options: *Fresh start* (all new AI estimates) or *Keep adjustments* (re-applies any manually overridden values to the new calculator). A temporary *Restore previous version* banner appears after regeneration in case you want to roll back. Calculators can be renamed, duplicated, or deleted from the list.
+**4. Saved Calculators** — full list of saved calculators with open, duplicate, rename, and delete actions. From any open calculator you can:
+- **Edit Customer Context** — update company details inline and regenerate with the new context
+- **Compare** — pick a second saved calculator and view both side by side: inputs with AI estimate / adjusted indicators, and ROI Summary metric cards for each
+- **Notes** — freeform text field for SA context (objections raised, adjusted assumptions, follow-up actions)
 
 ---
 
@@ -59,7 +60,7 @@ Calculator generation always sets `quality_required=True` — the output needs t
 
 ## Stack
 
-Python · Streamlit · Pydantic v2 · OpenAI GPT-5.4-nano · Anthropic Claude Sonnet 4.6 · Ollama
+Python · Streamlit · Pydantic v2 · OpenAI GPT-5.4-nano · Anthropic Claude Sonnet 4.6 · Ollama · fpdf2
 
 ---
 
@@ -76,7 +77,7 @@ cp .env.example .env        # edit: add API keys
 streamlit run app/streamlit_app.py
 ```
 
-Open `http://localhost:8501`. Two demo products and one complete scenario load automatically.
+Open `http://localhost:8501`. Two demo products and two complete scenarios load automatically.
 
 **Windows:** replace `cp` with `copy` and `source venv/bin/activate` with `venv\Scripts\activate`.
 
@@ -108,6 +109,7 @@ pytest tests/ -v
 value-mapper/
 ├── app/
 │   ├── streamlit_app.py        # entry point, navigation, secrets injection
+│   ├── utils.py                # shared helpers: fmt_unit, build_export_pdf, has_api_keys
 │   ├── components/sidebar.py   # shared sidebar header/footer
 │   └── pages/                  # Home, New Calculator, Scenarios, Product Library,
 │                               # Technical Info
@@ -120,6 +122,6 @@ value-mapper/
 │   ├── models.py               # ProductConfig, Scenario, Calculator, OutputMetric (Pydantic)
 │   ├── store.py                # file-based persistence; SCC-aware base directory
 │   ├── demo_products/          # FlowSync, SalesIQ — seeded on first load
-│   └── demo_scenarios/         # Meridian Financial / FlowSync — complete with calculator
+│   └── demo_scenarios/         # Meridian Financial / FlowSync, Orbit Analytics / SalesIQ
 └── tests/                      # pytest suite
 ```

@@ -16,7 +16,7 @@ from llm.router import LLMRouter
 st.title("Technical Info")
 st.caption("Developer reference — provider config, routing rules, environment, and data stats.")
 
-APP_VERSION = "0.4.0"
+APP_VERSION = "0.5.0"
 st.markdown(f"**App version:** `v{APP_VERSION}`")
 
 router = LLMRouter()
