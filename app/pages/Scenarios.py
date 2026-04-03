@@ -260,11 +260,12 @@ def _render_calculator_view(scenario: Scenario) -> None:
     with st.expander("Why these metrics?", expanded=False):
         st.write(calculator.rationale)
 
-    with st.expander("Notes", expanded=bool(scenario.notes)):
+    _scenario_notes = getattr(scenario, "notes", "")
+    with st.expander("Notes", expanded=bool(_scenario_notes)):
         with st.form(f"notes_form_{scenario.id}"):
             notes_val = st.text_area(
                 "Notes",
-                value=scenario.notes,
+                value=_scenario_notes,
                 height=100,
                 placeholder="e.g. CFO pushed back on hours saved estimate — adjusted down. Follow up after Q3 board meeting.",
                 label_visibility="collapsed",
