@@ -8,6 +8,15 @@ All notable changes to Value Mapper are documented here.
 
 ---
 
+## [1.0.1] — 2026-04-02
+
+### Fixed
+- **PDF export — inputs table** — removed description sub-rows; table is now a clean scannable grid. Removed Source column ("AI estimate" on every row was noise). Dollar input values no longer show unnecessary cents (95,000 not 95,000.00)
+- **PDF export — output metrics** — large values (≥ 100) now round to whole numbers (3,370 hours/year, not 3,369.6). "Why These Metrics?" renamed to "Methodology & Assumptions". Blank third page eliminated by disabling auto-page-break before footer placement
+- **Sidebar toggle button** — both collapsed (`»`) and expanded (`«`) states now pinned to the same fixed viewport position across all four portfolio apps (Value Mapper, TAM Copilot, Discovery Assistant, Relay)
+
+---
+
 ## [1.0.0] — 2026-04-02
 
 ### Added
