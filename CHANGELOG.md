@@ -8,6 +8,21 @@ All notable changes to Value Mapper are documented here.
 
 ---
 
+## [0.3.0] — 2026-04-02
+
+### Added
+- **PDF export** — calculators now download as a styled PDF (blue header, inputs table with AI estimate / Adjusted colour-coding, ROI Summary with prominent metric values, rationale section, footer); replaces plain-text export in both New Calculator and Saved Calculators views
+- **Regenerate in New Calculator view** — Regenerate button added to the action bar after generation, matching the Fresh start / Keep adjustments dialog already available in Saved Calculators; updates both session state and the auto-saved scenario on disk
+
+### Changed
+- **Home stats** — replaced the redundant "Calculators Saved" + "Calculators Generated" pair (always identical since auto-save) with "Calculators Built" + "Industries Covered" (unique industries across saved calculators)
+- **Shared utilities** — `fmt_unit()` and `build_export_pdf()` extracted to `app/utils.py`; removed duplicated `_fmt_unit` from both page files
+
+### Fixed
+- Back button in calculator view read "← Scenarios" after the rename to "Saved Calculators" — corrected to "← Saved Calculators"
+
+---
+
 ## [0.2.0] — 2026-04-02
 
 ### Added
