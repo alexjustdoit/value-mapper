@@ -28,8 +28,8 @@ st.subheader("LLM Provider Architecture")
 import pandas as pd
 
 provider_data = {
-    "Provider": ["Ollama (local)", "GPT-5.4-nano", "Claude Haiku 4.5"],
-    "Cost": ["Free", "~$0.01/call", "~$0.03/call"],
+    "Provider": ["Ollama (local)", "GPT-5.4-nano", "Claude Sonnet 4.6"],
+    "Cost": ["Free", "~$0.001/call", "~$0.014/call"],
     "Use Case": ["Development / zero-cost demo", "Fallback when no Anthropic key", "Calculator generation (quality_required=True)"],
 }
 st.dataframe(pd.DataFrame(provider_data), use_container_width=True, hide_index=True)
@@ -52,13 +52,26 @@ with col2:
     else:
         st.metric("Calculator Generation", f"{router.DEFAULT_CHEAP_API} (fallback — no Anthropic key)")
 
+st.subheader("API Keys")
+col1, col2 = st.columns(2)
+with col1:
+    if has_anthropic:
+        st.success("✅ ANTHROPIC_API_KEY set")
+    else:
+        st.warning("⚠️ ANTHROPIC_API_KEY not set — falling back to GPT-5.4-nano")
+with col2:
+    if has_openai:
+        st.success("✅ OPENAI_API_KEY set")
+    else:
+        st.error("❌ OPENAI_API_KEY not set — generation will fail")
+
 st.divider()
 
 # ── Quality Routing Rules ──────────────────────────────────────────────────────
 
 st.subheader("Quality Routing Rules")
 st.caption(
-    "When USE_LOCAL_LLM=false, features flagged quality_required=True route to Claude Haiku "
+    "When USE_LOCAL_LLM=false, features flagged quality_required=True route to Claude Sonnet 4.6 "
     "if ANTHROPIC_API_KEY is set, otherwise fall back to GPT-5.4-nano."
 )
 
@@ -103,7 +116,7 @@ env_rows = [
         "Variable": "ANTHROPIC_API_KEY",
         "Current Value": _mask(os.getenv("ANTHROPIC_API_KEY")),
         "Default": "—",
-        "Description": "Enables Claude Haiku for calculator generation",
+        "Description": "Enables Claude Sonnet 4.6 for calculator generation",
     },
     {
         "Variable": "OPENAI_MODEL",
@@ -113,8 +126,8 @@ env_rows = [
     },
     {
         "Variable": "CLAUDE_MODEL",
-        "Current Value": os.getenv("CLAUDE_MODEL", "claude-haiku-4-5-20251001"),
-        "Default": "claude-haiku-4-5-20251001",
+        "Current Value": os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6"),
+        "Default": "claude-sonnet-4-6",
         "Description": "Override the default Claude model",
     },
     {
