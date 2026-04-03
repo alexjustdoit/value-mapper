@@ -76,7 +76,9 @@ class OutputMetric(BaseModel):
         if unit == "%":
             return f"{value:.1f}%"
         if "month" in unit.lower() and value < 24:
-            return f"{value:.1f} {unit}"
+            return f"{value:.1f} {unit}" if value != int(value) else f"{int(value)} {unit}"
+        if value == int(value):
+            return f"{int(value):,} {unit}"
         return f"{value:,.1f} {unit}"
 
 

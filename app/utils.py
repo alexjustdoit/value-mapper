@@ -14,6 +14,13 @@ def has_api_keys() -> bool:
     )
 
 
+def _truncate(text: str, limit: int = 115) -> str:
+    """Truncate at a word boundary to avoid mid-word cuts."""
+    if len(text) <= limit:
+        return text
+    return text[:limit].rsplit(" ", 1)[0] + "..."
+
+
 def _pdf_str(text: str) -> str:
     """Sanitize a string for fpdf2 built-in fonts (Latin-1 only).
 
@@ -101,20 +108,19 @@ def build_export_pdf(
     # ── Inputs ────────────────────────────────────────────────────────────────
     section_header("Inputs")
 
-    col_widths = [75, 28, 30, 37]
+    col_widths = [112, 30, 28]
 
     # Table header row
     pdf.set_fill_color(*LIGHT)
     pdf.set_text_color(*GRAY)
     pdf.set_font("Helvetica", "B", 8)
-    for w, label in zip(col_widths, ["Field", "Unit", "Value", "Source"]):
+    for w, label in zip(col_widths, ["Field", "Unit", "Value"]):
         pdf.cell(w, 5, label, fill=True)
     pdf.ln()
 
     # Data rows
     for i, field in enumerate(calculator.fields):
         val = field.current_value if field.current_value is not None else field.ai_estimate
-        source = "Adjusted" if field.current_value is not None else "AI estimate"
 
         try:
             is_int = (
@@ -131,24 +137,19 @@ def build_export_pdf(
 
         pdf.set_text_color(*DARK)
         pdf.set_font("Helvetica", "B", 8)
-        pdf.cell(col_widths[0], 5, _pdf_str(field.label)[:42], fill=True)
+        pdf.cell(col_widths[0], 5, _pdf_str(field.label)[:55], fill=True)
         pdf.set_font("Helvetica", "", 8)
         pdf.set_text_color(*GRAY)
         pdf.cell(col_widths[1], 5, _pdf_str(fmt_unit(field.unit))[:18], fill=True)
         pdf.set_text_color(*DARK)
         pdf.cell(col_widths[2], 5, val_str, fill=True)
-        if source == "Adjusted":
-            pdf.set_text_color(210, 95, 30)
-        else:
-            pdf.set_text_color(55, 135, 75)
-        pdf.cell(col_widths[3], 5, source, fill=True)
         pdf.ln()
 
         # Description sub-row
         pdf.set_text_color(*GRAY)
         pdf.set_font("Helvetica", "I", 7)
         pdf.set_x(pdf.l_margin)
-        pdf.cell(0, 4, _pdf_str(field.description)[:90])
+        pdf.cell(0, 4, _pdf_str(_truncate(field.description)))
         pdf.ln(5)
 
     pdf.ln(5)
@@ -172,12 +173,13 @@ def build_export_pdf(
     pdf.ln(4)
 
     # ── Rationale ────────────────────────────────────────────────────────────
-    section_header("Why These Metrics?")
+    section_header("Methodology & Assumptions")
     pdf.set_font("Helvetica", "", 9)
     pdf.set_text_color(50, 50, 60)
     pdf.multi_cell(0, 5, _pdf_str(calculator.rationale))
 
     # ── Footer ────────────────────────────────────────────────────────────────
+    pdf.set_auto_page_break(False)
     pdf.set_y(-15)
     pdf.set_font("Helvetica", "", 7)
     pdf.set_text_color(*GRAY)
