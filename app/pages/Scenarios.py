@@ -197,7 +197,8 @@ def _render_comparison_view(scenario_a: Scenario, scenario_b: Scenario) -> None:
             for metric in calculator.output_metrics:
                 value_str = metric.format_value(calculator.fields)
                 with st.container(border=True):
-                    st.metric(label=metric.label, value=value_str)
+                    st.caption(metric.label)
+                    st.markdown(f"### {value_str}")
                     st.caption(metric.description)
 
 
@@ -241,7 +242,7 @@ def _render_calculator_view(scenario: Scenario) -> None:
     # ── Header ────────────────────────────────────────────────────────────────
     col_back, col_title, col_rename, col_edit_cust = st.columns([1, 5, 1, 1], vertical_alignment="center")
     with col_back:
-        if st.button("← Saved Calculators"):
+        if st.button("← Back"):
             st.session_state.pop("active_scenario_id", None)
             st.rerun()
     with col_title:
@@ -318,7 +319,8 @@ def _render_calculator_view(scenario: Scenario) -> None:
         for metric in calculator.output_metrics:
             value_str = metric.format_value(calculator.fields)
             with st.container(border=True):
-                st.metric(label=metric.label, value=value_str)
+                st.caption(metric.label)
+                st.markdown(f"### {value_str}")
                 st.caption(metric.description)
 
     st.divider()

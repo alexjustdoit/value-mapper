@@ -519,7 +519,8 @@ def _render_calculator() -> None:
         for metric in calculator.output_metrics:
             value_str = metric.format_value(calculator.fields)
             with st.container(border=True):
-                st.metric(label=metric.label, value=value_str)
+                st.caption(metric.label)
+                st.markdown(f"### {value_str}")
                 st.caption(metric.description)
 
     st.divider()
