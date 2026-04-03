@@ -8,6 +8,20 @@ All notable changes to Value Mapper are documented here.
 
 ---
 
+## [0.5.0] — 2026-04-02
+
+### Added
+- **Second demo scenario** — Orbit Analytics / SalesIQ pre-loaded on first visit (6 fields, 3 metrics: Annual Admin Time Recovered, Annual Research Time Saved, Total Annual Labour Savings ~$1.7M); makes the Compare feature immediately demoable without building a second calculator manually
+- **Scenario notes** — collapsible Notes expander in every calculator view; SA can record freeform context (objections, follow-ups, adjustments rationale); collapsed when empty, auto-expanded when notes exist
+
+### Changed
+- **Technical Info** — version badge (`v0.5.0`) added at the top of the page; API key status copy corrected (no longer shows an error when only Anthropic key is set and OpenAI key is absent)
+
+### Fixed
+- `notes` field added to `Scenario` model (default `""`); existing saved scenarios load without changes
+
+---
+
 ## [0.4.0] — 2026-04-02
 
 ### Added
