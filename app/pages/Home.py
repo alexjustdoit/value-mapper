@@ -3,6 +3,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import streamlit as st
+from app.utils import has_api_keys
 from data.store import list_products, list_scenarios
 
 st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
@@ -13,6 +14,15 @@ st.markdown(
     "Enter your product's value drivers, describe a prospect's situation, and get an interactive "
     "calculator with AI-estimated inputs — ready to adjust and present in any conversation."
 )
+
+# ── No API key warning ────────────────────────────────────────────────────────
+if not has_api_keys():
+    st.warning(
+        "**No API key detected.** Add an `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` to your "
+        "environment (or `.env` file) to generate calculators. "
+        "See the Technical Info page for setup details.",
+        icon="⚠️",
+    )
 
 st.divider()
 
@@ -41,6 +51,29 @@ with col_b:
     st.caption("Reopen a previous calculator to adjust inputs, review ROI outputs, or present to a customer.")
     if st.button("View Calculators →", use_container_width=True):
         st.switch_page("pages/Scenarios.py")
+
+# ── How it works ─────────────────────────────────────────────────────────────
+st.divider()
+st.subheader("How It Works")
+hw1, hw2, hw3 = st.columns(3)
+with hw1:
+    st.markdown("**1. Configure Your Product**")
+    st.caption(
+        "Enter your product's name, description, and value drivers — "
+        "or load a saved config from the Product Library."
+    )
+with hw2:
+    st.markdown("**2. Describe the Customer**")
+    st.caption(
+        "Provide the prospect's industry, company size, and key pain points. "
+        "Use a demo context to get started quickly."
+    )
+with hw3:
+    st.markdown("**3. Build & Adjust**")
+    st.caption(
+        "AI generates a tailored calculator with estimated inputs. "
+        "Adjust any value and ROI outputs recalculate instantly."
+    )
 
 # ── Recent scenarios ─────────────────────────────────────────────────────────
 if scenarios:

@@ -1,6 +1,17 @@
 from __future__ import annotations
 
+import os
+
 from fpdf import FPDF
+
+
+def has_api_keys() -> bool:
+    """Return True if at least one LLM provider is usable."""
+    return bool(
+        os.getenv("USE_LOCAL_LLM", "false").lower() == "true"
+        or os.getenv("OPENAI_API_KEY")
+        or os.getenv("ANTHROPIC_API_KEY")
+    )
 
 
 def fmt_unit(unit: str) -> str:

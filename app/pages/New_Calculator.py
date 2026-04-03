@@ -5,7 +5,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 import uuid
 
 import streamlit as st
-from app.utils import build_export_pdf, fmt_unit
+from app.utils import build_export_pdf, fmt_unit, has_api_keys
 from data.models import CustomerContext, ProductConfig, Scenario, ValueDriver
 
 st.markdown("<style>[data-testid='stSidebarNav'],[data-testid='stSidebarNavItems'],[data-testid='stSidebarNavLink']{display:none!important}</style>", unsafe_allow_html=True)
@@ -377,7 +377,12 @@ def _render_step2() -> None:
         with col_back:
             back_btn = st.form_submit_button("← Back", use_container_width=True)
         with col_gen:
-            gen_btn = st.form_submit_button("Generate Calculator →", type="primary", use_container_width=True)
+            gen_btn = st.form_submit_button(
+                "Generate Calculator →",
+                type="primary",
+                use_container_width=True,
+                disabled=not has_api_keys(),
+            )
 
     if back_btn:
         st.session_state[_STEP] = 1
@@ -551,6 +556,14 @@ step = _step()
 
 st.header("New Calculator")
 _render_progress(step)
+
+if not has_api_keys():
+    st.warning(
+        "**No API key detected.** Add an `OPENAI_API_KEY` or `ANTHROPIC_API_KEY` to your "
+        "environment before generating a calculator. See the Technical Info page for setup details.",
+        icon="⚠️",
+    )
+
 st.divider()
 
 if step == 1:
