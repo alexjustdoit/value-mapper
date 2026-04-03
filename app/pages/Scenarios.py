@@ -252,10 +252,10 @@ def _render_calculator_view(scenario: Scenario) -> None:
             f"Product: {product.name}"
         )
     with col_rename:
-        if st.button("✏️ Rename", use_container_width=True):
+        if st.button("Rename", use_container_width=True):
             _rename_dialog(scenario)
     with col_edit_cust:
-        if st.button("✏️ Customer", use_container_width=True):
+        if st.button("Edit Context", use_container_width=True):
             _edit_customer_dialog(scenario)
 
     with st.expander("Why these metrics?", expanded=False):
