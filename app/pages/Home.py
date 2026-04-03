@@ -19,12 +19,12 @@ st.divider()
 # ── Quick stats ──────────────────────────────────────────────────────────────
 products = list_products()
 scenarios = list_scenarios()
-generated = [s for s in scenarios if s.calculator is not None]
+industries = len({s.customer.industry for s in scenarios})
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Products Configured", len(products))
-col2.metric("Calculators Saved", len(scenarios))
-col3.metric("Calculators Generated", len(generated))
+col2.metric("Calculators Built", len(scenarios))
+col3.metric("Industries Covered", industries)
 
 st.divider()
 
