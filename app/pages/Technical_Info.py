@@ -16,6 +16,9 @@ from llm.router import LLMRouter
 st.title("Technical Info")
 st.caption("Developer reference — provider config, routing rules, environment, and data stats.")
 
+APP_VERSION = "0.4.0"
+st.markdown(f"**App version:** `v{APP_VERSION}`")
+
 router = LLMRouter()
 use_local = os.getenv("USE_LOCAL_LLM", "false").lower() == "true"
 has_anthropic = bool(os.getenv("ANTHROPIC_API_KEY"))
@@ -62,8 +65,10 @@ with col1:
 with col2:
     if has_openai:
         st.success("✅ OPENAI_API_KEY set")
+    elif has_anthropic:
+        st.info("ℹ️ OPENAI_API_KEY not set — Anthropic key will be used")
     else:
-        st.error("❌ OPENAI_API_KEY not set — generation will fail")
+        st.error("❌ OPENAI_API_KEY not set — add at least one API key")
 
 st.divider()
 

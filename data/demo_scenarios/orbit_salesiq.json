@@ -1,0 +1,135 @@
+{
+  "id": "demo-scenario-orbit",
+  "name": "Orbit Analytics — SalesIQ",
+  "notes": "",
+  "product_snapshot": {
+    "id": "demo-product-salesiq",
+    "name": "SalesIQ",
+    "description": "SalesIQ is an AI-powered sales intelligence platform that automates prospect research, enriches CRM data in real time, and surfaces buying signals so reps spend more time selling and less time on admin. Designed for B2B SaaS sales teams.",
+    "value_drivers": [
+      {
+        "name": "Prospecting Efficiency",
+        "description": "Automates research and list building so reps spend more time on outreach"
+      },
+      {
+        "name": "Pipeline Velocity",
+        "description": "Surfaces buying signals and intent data to prioritize the right accounts at the right time"
+      },
+      {
+        "name": "Rep Productivity",
+        "description": "Reduces CRM admin overhead — auto-logging, data enrichment, and activity capture"
+      }
+    ],
+    "use_cases": [
+      "Automated prospect research and company enrichment",
+      "Intent-based account prioritization",
+      "CRM data hygiene and auto-logging",
+      "Competitive intelligence alerts"
+    ],
+    "created_at": "2026-04-01T00:00:00+00:00",
+    "updated_at": "2026-04-01T00:00:00+00:00"
+  },
+  "source_product_id": "demo-product-salesiq",
+  "customer": {
+    "company_name": "Orbit Analytics",
+    "industry": "B2B SaaS",
+    "company_size": "50–150 employees",
+    "pain_points": [
+      "Sales reps spend 3+ hours per day on manual CRM data entry and activity logging",
+      "Pipeline data is stale by the time it reaches the weekly forecast call",
+      "Onboarding new reps takes 6 weeks — too much tribal knowledge, no structured playbook",
+      "CS and Sales have no shared view of account health, causing renewal surprises"
+    ],
+    "notes": "Series B SaaS company. 40-person sales org, growing fast. CRO is the sponsor — wants to improve forecast accuracy and reduce ramp time ahead of a planned sales headcount expansion."
+  },
+  "calculator": {
+    "fields": [
+      {
+        "id": "demo-orbit-field-01",
+        "key": "reps",
+        "label": "Sales reps",
+        "unit": "employees",
+        "description": "Total number of quota-carrying sales reps",
+        "ai_estimate": 40.0,
+        "current_value": null,
+        "value_driver": "Rep Productivity"
+      },
+      {
+        "id": "demo-orbit-field-02",
+        "key": "admin_hours_per_week",
+        "label": "CRM admin hours per rep per week",
+        "unit": "hours/week",
+        "description": "Time each rep spends on data entry, activity logging, and CRM hygiene",
+        "ai_estimate": 3.5,
+        "current_value": null,
+        "value_driver": "Rep Productivity"
+      },
+      {
+        "id": "demo-orbit-field-03",
+        "key": "rep_hourly_cost",
+        "label": "Fully-loaded cost per rep hour",
+        "unit": "$/hour",
+        "description": "OTE salary + benefits + overhead, divided by annual working hours",
+        "ai_estimate": 85.0,
+        "current_value": null,
+        "value_driver": "Rep Productivity"
+      },
+      {
+        "id": "demo-orbit-field-04",
+        "key": "leads_per_week",
+        "label": "Prospects manually researched per rep per week",
+        "unit": "leads/week",
+        "description": "Number of accounts each rep individually researches before outreach",
+        "ai_estimate": 15.0,
+        "current_value": null,
+        "value_driver": "Prospecting Efficiency"
+      },
+      {
+        "id": "demo-orbit-field-05",
+        "key": "minutes_per_lead",
+        "label": "Minutes per prospect for manual research",
+        "unit": "minutes/lead",
+        "description": "Time spent on LinkedIn, company website, and news before a single outreach",
+        "ai_estimate": 25.0,
+        "current_value": null,
+        "value_driver": "Prospecting Efficiency"
+      },
+      {
+        "id": "demo-orbit-field-06",
+        "key": "ramp_weeks",
+        "label": "New rep ramp time",
+        "unit": "weeks",
+        "description": "Weeks until a new rep reaches full productivity",
+        "ai_estimate": 6.0,
+        "current_value": null,
+        "value_driver": "Rep Productivity"
+      }
+    ],
+    "output_metrics": [
+      {
+        "id": "demo-orbit-metric-01",
+        "label": "Annual Admin Time Recovered",
+        "unit": "hours/year",
+        "description": "Selling hours reclaimed by eliminating manual CRM data entry across the team",
+        "formula": "reps * admin_hours_per_week * 52"
+      },
+      {
+        "id": "demo-orbit-metric-02",
+        "label": "Annual Research Time Saved",
+        "unit": "hours/year",
+        "description": "Hours saved by automating prospect research across all reps",
+        "formula": "reps * (leads_per_week * (minutes_per_lead / 60)) * 52"
+      },
+      {
+        "id": "demo-orbit-metric-03",
+        "label": "Total Annual Labour Savings",
+        "unit": "$",
+        "description": "Combined value of admin and research time recovered at fully-loaded rep cost",
+        "formula": "(reps * admin_hours_per_week * 52 + reps * (leads_per_week * (minutes_per_lead / 60)) * 52) * rep_hourly_cost"
+      }
+    ],
+    "rationale": "Orbit's two biggest cost levers are rep time lost to CRM admin and manual prospecting research — both directly addressable by SalesIQ's automation. The ramp time field anchors the conversation around a third pain point (tribal knowledge / onboarding) that the CRO flagged. Labour savings are calculated at fully-loaded rep cost, which makes the number credible in a board-level ROI conversation."
+  },
+  "created_at": "2026-04-01T00:00:00+00:00",
+  "updated_at": "2026-04-01T00:00:00+00:00"
+}

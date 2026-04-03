@@ -260,6 +260,20 @@ def _render_calculator_view(scenario: Scenario) -> None:
     with st.expander("Why these metrics?", expanded=False):
         st.write(calculator.rationale)
 
+    with st.expander("Notes", expanded=bool(scenario.notes)):
+        with st.form(f"notes_form_{scenario.id}"):
+            notes_val = st.text_area(
+                "Notes",
+                value=scenario.notes,
+                height=100,
+                placeholder="e.g. CFO pushed back on hours saved estimate — adjusted down. Follow up after Q3 board meeting.",
+                label_visibility="collapsed",
+            )
+            if st.form_submit_button("Save Notes", use_container_width=False):
+                scenario.notes = notes_val
+                save_scenario(scenario)
+                st.success("Notes saved.")
+
     st.divider()
 
     col_inputs, col_outputs = st.columns([3, 2], gap="large")

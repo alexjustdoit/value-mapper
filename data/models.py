@@ -89,6 +89,7 @@ class Calculator(BaseModel):
 class Scenario(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
+    notes: str = ""  # SA's freeform notes about this calculator
     product_snapshot: ProductConfig  # frozen copy with any ad-hoc edits applied
     source_product_id: Optional[str] = None  # reference back to the library product
     customer: CustomerContext
