@@ -33,21 +33,21 @@ Two demo products (FlowSync, SalesIQ) and one complete scenario (Meridian Financ
 - *Step 2 — Customer:* company name, industry, size, pain points, and any additional context.
 - *Step 3 — Generate:* the AI builds a calculator tailored to this product/customer combination — input fields with realistic industry-based estimates, output metrics with arithmetic formulas, and a rationale for why these metrics were chosen.
 
-**3. Interactive Calculator** — adjust any AI-estimated input; all output metrics recalculate live. Input fields show whether a value is the original AI estimate or an SA override. Save the scenario with a name; it's available in the Scenarios page for future reference.
+**3. Interactive Calculator** — the calculator is auto-saved immediately after generation so it's never lost. Adjust any AI-estimated input; all output metrics recalculate live. Input fields show whether a value is the original AI estimate or an SA override. An unsaved changes indicator appears when session values differ from what's on disk. Use "Rename & Save" to optionally rename the calculator before committing; export to a plain-text file at any point.
 
-**4. Scenarios** — full list of saved calculators. Reopen any scenario to adjust inputs, review ROI outputs, or regenerate the calculator with a fresh AI call. Changes can be saved back to the scenario.
+**4. Saved Calculators** — full list of saved calculators. Reopen any scenario to adjust inputs, review ROI outputs, export, or regenerate. Regeneration prompts for confirmation and offers two options: *Fresh start* (all new AI estimates) or *Keep adjustments* (re-applies any manually overridden values to the new calculator). A temporary *Restore previous version* banner appears after regeneration in case you want to roll back. Calculators can be renamed, duplicated, or deleted from the list.
 
 ---
 
 ## Architecture
 
 ```
-LLM Router → Ollama (local, free)           ← development / zero API cost
-           → GPT-5.4-nano (OpenAI API)      ← fallback when Anthropic key absent
-           → Claude Haiku 4.5 (Anthropic)   ← calculator generation (quality_required=True)
+LLM Router → Ollama (local, free)             ← development / zero API cost
+           → GPT-5.4-nano (OpenAI API)        ← fallback when Anthropic key absent
+           → Claude Sonnet 4.6 (Anthropic)    ← calculator generation (quality_required=True)
 ```
 
-Calculator generation always sets `quality_required=True` — the output needs to be precise (valid Python identifier field keys, arithmetic formulas referencing only defined keys, realistic numeric estimates) and structured correctly for formula evaluation. Claude Haiku handles this reliably; GPT-5.4-nano is the fallback if no Anthropic key is configured.
+Calculator generation always sets `quality_required=True` — the output needs to be precise (valid Python identifier field keys, arithmetic formulas referencing only defined keys, realistic numeric estimates) and structured correctly for formula evaluation. Claude Sonnet 4.6 handles this reliably; GPT-5.4-nano is the fallback if no Anthropic key is configured.
 
 **Formula evaluation** — output metric formulas are Python arithmetic expressions with field keys as variables (e.g. `hours_saved_per_week * 52 * avg_hourly_rate`). Evaluated with a restricted `eval()` that only exposes the field value namespace — no builtins, no globals. The AI is instructed to use only snake_case identifiers it defines, validated by the Pydantic schema before evaluation runs.
 
@@ -59,7 +59,7 @@ Calculator generation always sets `quality_required=True` — the output needs t
 
 ## Stack
 
-Python · Streamlit · Pydantic v2 · OpenAI GPT-5.4-nano · Anthropic Claude Haiku 4.5 · Ollama
+Python · Streamlit · Pydantic v2 · OpenAI GPT-5.4-nano · Anthropic Claude Sonnet 4.6 · Ollama
 
 ---
 
@@ -85,10 +85,10 @@ Open `http://localhost:8501`. Two demo products and one complete scenario load a
 ```bash
 USE_LOCAL_LLM=true          # true → Ollama (free); false → OpenAI/Claude API
 OPENAI_API_KEY=sk-...       # required when USE_LOCAL_LLM=false
-ANTHROPIC_API_KEY=sk-ant-...  # optional — enables Claude Haiku for calculator generation
+ANTHROPIC_API_KEY=sk-ant-...  # optional — enables Claude Sonnet 4.6 for calculator generation
 ```
 
-To run fully free locally, install [Ollama](https://ollama.com), run `ollama pull phi4`, and set `USE_LOCAL_LLM=true`. All LLM calls run on your machine at no cost. Demo session cost on API providers: ~$0.01–0.05 per calculator generated.
+To run fully free locally, install [Ollama](https://ollama.com), run `ollama pull phi4`, and set `USE_LOCAL_LLM=true`. All LLM calls run on your machine at no cost. Demo session cost on API providers: ~$0.014 per calculator generated (Claude Sonnet 4.6) or ~$0.001 (GPT-5.4-nano fallback).
 
 **Streamlit Cloud:** fork the repo, set main file to `app/streamlit_app.py`, and add keys under Settings → Secrets. Include `SCC_MODE = "true"` to enable per-session data isolation.
 
