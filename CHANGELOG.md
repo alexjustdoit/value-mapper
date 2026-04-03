@@ -8,6 +8,16 @@ All notable changes to Value Mapper are documented here.
 
 ---
 
+## [0.4.0] — 2026-04-02
+
+### Added
+- **"How it works" section** — 3-step explainer on the Home page (Configure Product → Describe Customer → Build & Adjust), positioned between the CTAs and Recent Calculators
+- **No API key guard** — warning banner on Home and New Calculator when no `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, or local LLM is configured; Generate Calculator button disabled until a key is present
+- **Edit Customer Context** — "✏️ Customer" button in the calculator view header opens a dialog to update company name, industry, size, pain points, and notes inline; saves to disk and shows a prompt to regenerate so AI estimates stay accurate
+- **Scenario comparison** — "⚖️ Compare" button in the calculator action bar opens a picker dialog; displays two calculators side by side with read-only inputs (showing current values and AI estimate / adjusted indicators) and live ROI Summary metric cards; "Open →" per side returns to the full interactive view
+
+---
+
 ## [0.3.0] — 2026-04-02
 
 ### Added
